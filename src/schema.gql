@@ -1,0 +1,70 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type RoomType {
+  """ID"""
+  id: ID!
+
+  """Name"""
+  name: String!
+
+  """Base Price"""
+  basePrice: Float!
+
+  """Max Capacity"""
+  maxCapacity: Int!
+
+  """Is Active"""
+  isActive: Boolean!
+
+  """Created At"""
+  createdAt: Date!
+
+  """Updated At"""
+  updatedAt: Date!
+}
+
+"""DateTime custom scalar type"""
+scalar Date
+
+type Query {
+  roomTypes: [RoomType!]!
+  roomType(id: ID!): RoomType!
+}
+
+type Mutation {
+  """Llena la base de datos (Solo para desarrollo)"""
+  executeSeed: String!
+  createRoomType(createRoomTypeInput: CreateRoomTypeInput!): RoomType!
+  updateRoomType(updateRoomTypeInput: UpdateRoomTypeInput!): RoomType!
+}
+
+input CreateRoomTypeInput {
+  """Name"""
+  name: String!
+
+  """Base Price"""
+  basePrice: Float!
+
+  """Max Capacity"""
+  maxCapacity: Int!
+
+  """Is Active"""
+  isActive: Boolean
+}
+
+input UpdateRoomTypeInput {
+  """Name"""
+  name: String
+
+  """Base Price"""
+  basePrice: Float
+
+  """Max Capacity"""
+  maxCapacity: Int
+
+  """Is Active"""
+  isActive: Boolean
+  id: ID!
+}
