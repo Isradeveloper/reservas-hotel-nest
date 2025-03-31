@@ -188,7 +188,7 @@ export class RoomService {
       : 0;
     const weekendDays = calculateTotalWeekendDays(checkIn, checkOut);
     const basePriceOfNights = calculatePriceOfNights(days, nights, basePrice);
-    const discount = calculateDiscount(basePrice, nights);
+    const discount = calculateDiscount(nights);
     const weekendIncrease = calculateTotalWeekendIncrement(
       basePrice,
       weekendDays,

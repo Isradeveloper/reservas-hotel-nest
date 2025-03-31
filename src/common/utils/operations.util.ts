@@ -105,7 +105,7 @@ export const calculateTotalWeekendIncrement = (
   return basePrice * (incrementPercent / 100) * days;
 };
 
-export const calculateDiscount = (basePrice: number, nights: number) => {
+export const calculateDiscount = (nights: number) => {
   let discountPerNight = 0;
 
   if (nights >= 4 && nights <= 6) {
@@ -117,4 +117,8 @@ export const calculateDiscount = (basePrice: number, nights: number) => {
   }
 
   return discountPerNight * nights;
+};
+
+export const randomNumber = (min: number, max: number): number => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 };
