@@ -6,5 +6,6 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 @Module({
   imports: [PrismaModule],
   providers: [RoomTypeResolver, RoomTypeService],
+  exports: [RoomTypeService],
 })
 export class RoomTypeModule {}

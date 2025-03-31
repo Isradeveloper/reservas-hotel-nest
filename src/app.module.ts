@@ -10,6 +10,9 @@ import { envValidationSchema } from './config/config.validation';
 import { SeedModule } from './seed/seed.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RoomTypeModule } from './room-type/room-type.module';
+import { RoomViewModule } from './room-view/room-view.module';
+import { RoomModule } from './room/room.module';
+import { ReservationModule } from './reservation/reservation.module';
 
 @Module({
   imports: [
@@ -27,6 +30,9 @@ import { RoomTypeModule } from './room-type/room-type.module';
     SeedModule,
     PrismaModule,
     RoomTypeModule,
+    RoomViewModule,
+    RoomModule,
+    ReservationModule,
   ],
   controllers: [],
   providers: [DateScalar],

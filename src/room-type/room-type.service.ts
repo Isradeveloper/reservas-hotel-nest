@@ -35,12 +35,11 @@ export class RoomTypeService {
     return roomType;
   }
 
-  async findOneByName(name: string): Promise<RoomType> {
+  async findOneByName(name: string): Promise<RoomType | null> {
     const roomType = await this.prismaService.roomType.findUnique({
       where: { name },
     });
 
-    if (!roomType) throw new BadRequestException('RoomType not found');
     return roomType;
   }
 

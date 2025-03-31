@@ -25,12 +25,121 @@ type RoomType {
   updatedAt: Date!
 }
 
+type RoomView {
+  """ID of the room view"""
+  id: ID!
+
+  """Name of the room view"""
+  name: String!
+
+  """Creation date of the room view"""
+  createdAt: Date!
+
+  """Last update date of the room view"""
+  updatedAt: Date!
+
+  """Is the room view active"""
+  isActive: Boolean!
+}
+
+type BillingDetails {
+  days: Int!
+  nights: Int!
+  basePrice: Float!
+  weekendIncrease: Float!
+  daysDiscount: Float!
+  allInclusiveTotal: Float!
+}
+
+type AvailableRoom {
+  """ID of the room"""
+  id: ID!
+
+  """Number of the room"""
+  number: Int!
+
+  """Is the room active"""
+  isActive: Boolean!
+
+  """Date of creation"""
+  createdAt: Date!
+
+  """Date of last update"""
+  updatedAt: Date!
+
+  """Billing details"""
+  billingDetails: BillingDetails
+}
+
+type Room {
+  """ID of the room"""
+  id: ID!
+
+  """Number of the room"""
+  number: Int!
+
+  """Is the room active"""
+  isActive: Boolean!
+
+  """Date of creation"""
+  createdAt: Date!
+
+  """Date of last update"""
+  updatedAt: Date!
+  type: RoomType!
+  view: RoomView!
+}
+
+type Reservation {
+  """ID"""
+  id: ID!
+
+  """Check In"""
+  checkIn: Date!
+
+  """Check Out"""
+  checkOut: Date!
+
+  """People Number"""
+  peopleNumber: Int!
+
+  """All Inclusive"""
+  allInclusive: Boolean!
+
+  """Total"""
+  total: Float!
+}
+
 """DateTime custom scalar type"""
 scalar Date
 
 type Query {
   roomTypes: [RoomType!]!
   roomType(id: ID!): RoomType!
+  roomViews: [RoomView!]!
+  roomView(id: ID!): RoomView!
+  rooms: [Room!]!
+  room(id: ID!): Room!
+  availableRooms(
+    """Check In (yyyy-MM-dd HH:mm)"""
+    checkIn: String!
+
+    """Check Out (yyyy-MM-dd HH:mm)"""
+    checkOut: String!
+
+    """People Number"""
+    peopleNumber: Int!
+
+    """Room Type ID"""
+    roomTypeId: ID
+
+    """Room View ID"""
+    roomViewId: ID
+
+    """All Inclusive"""
+    allInclusive: Boolean = false
+  ): [AvailableRoom!]!
+  reservation(id: ID!): Reservation!
 }
 
 type Mutation {
@@ -38,6 +147,12 @@ type Mutation {
   executeSeed: String!
   createRoomType(createRoomTypeInput: CreateRoomTypeInput!): RoomType!
   updateRoomType(updateRoomTypeInput: UpdateRoomTypeInput!): RoomType!
+  createRoomView(createRoomViewInput: CreateRoomViewInput!): RoomView!
+  updateRoomView(updateRoomViewInput: UpdateRoomViewInput!): RoomView!
+  createRoom(createRoomInput: CreateRoomInput!): Room!
+  updateRoom(updateRoomInput: UpdateRoomInput!): Room!
+  createReservation(createReservationInput: CreateReservationInput!): Reservation!
+  updateReservation(updateReservationInput: UpdateReservationInput!): Reservation!
 }
 
 input CreateRoomTypeInput {
@@ -66,5 +181,84 @@ input UpdateRoomTypeInput {
 
   """Is Active"""
   isActive: Boolean
+  id: ID!
+}
+
+input CreateRoomViewInput {
+  """Name of the room view"""
+  name: String!
+
+  """Is the room view active"""
+  isActive: Boolean
+}
+
+input UpdateRoomViewInput {
+  """Name of the room view"""
+  name: String
+
+  """Is the room view active"""
+  isActive: Boolean
+
+  """ID of the room view"""
+  id: ID!
+}
+
+input CreateRoomInput {
+  """Number of the room"""
+  number: Int!
+
+  """Type of the room"""
+  roomTypeId: ID!
+
+  """View of the room"""
+  roomViewId: ID!
+}
+
+input UpdateRoomInput {
+  """Number of the room"""
+  number: Int
+
+  """Type of the room"""
+  roomTypeId: ID
+
+  """View of the room"""
+  roomViewId: ID
+  id: ID!
+}
+
+input CreateReservationInput {
+  """Check In (yyyy-MM-dd HH:mm)"""
+  checkIn: String!
+
+  """Check Out (yyyy-MM-dd HH:mm)"""
+  checkOut: String!
+
+  """People Number"""
+  peopleNumber: Int!
+
+  """All Inclusive"""
+  allInclusive: Boolean!
+
+  """Room ID"""
+  roomId: ID!
+}
+
+input UpdateReservationInput {
+  """Check In (yyyy-MM-dd HH:mm)"""
+  checkIn: String
+
+  """Check Out (yyyy-MM-dd HH:mm)"""
+  checkOut: String
+
+  """People Number"""
+  peopleNumber: Int
+
+  """All Inclusive"""
+  allInclusive: Boolean
+
+  """Room ID"""
+  roomId: ID
+
+  """ID"""
   id: ID!
 }

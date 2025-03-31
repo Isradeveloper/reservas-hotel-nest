@@ -47,4 +47,21 @@ model Room {
 
   roomViewId String
   roomView   RoomView @relation(fields: [roomViewId], references: [id])
+
+  reservations Reservation[]
+}
+
+model Reservation {
+  id           String   @id @default(uuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  isActive     Boolean  @default(true)
+  checkIn      DateTime @db.Timestamp()
+  checkOut     DateTime @db.Timestamp()
+  peopleNumber Int
+  allInclusive Boolean
+  total        Float
+
+  roomId String
+  room   Room   @relation(fields: [roomId], references: [id])
 }
