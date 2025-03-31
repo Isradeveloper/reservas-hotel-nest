@@ -1,4 +1,10 @@
-import { differenceInCalendarDays } from 'date-fns';
+import {
+  addDays,
+  differenceInCalendarDays,
+  isFriday,
+  isSaturday,
+  isSunday,
+} from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
 
 export const pageSizeToOffsetLimit = ({
@@ -55,4 +61,60 @@ export const calculatePriceAllInclusive = (
   if (days === 1 && nights === 0) return pricePerNight * quantityPeople;
 
   return nights * pricePerNight * quantityPeople;
+};
+
+/**
+ * Calcula la cantidad de noches de fin de semana en un rango de fechas.
+ *
+ * @param {Date} checkIn - Fecha y hora de check-in
+ * @param {Date} checkOut - Fecha y hora de check-out
+ * @returns {number} - Cantidad de noches de fin de semana
+ */
+export const calculateTotalWeekendDays = (
+  checkIn: Date,
+  checkOut: Date,
+): number => {
+  const timeZone = 'America/Bogota';
+  let weekendNights = 0;
+  let currentDate = toZonedTime(checkIn, timeZone);
+
+  // Iteramos por cada noche desde check-in hasta check-out
+  while (currentDate < checkOut) {
+    const nextDay = addDays(currentDate, 1);
+
+    // Verificamos si la noche es de viernes a sábado o de sábado a domingo
+    if (
+      (isFriday(currentDate) && isSaturday(nextDay)) ||
+      (isSaturday(currentDate) && isSunday(nextDay))
+    ) {
+      weekendNights++; // Incrementamos la cuenta de noches de fin de semana
+    }
+
+    // Avanzamos al siguiente día
+    currentDate = nextDay;
+  }
+
+  return weekendNights;
+};
+
+export const calculateTotalWeekendIncrement = (
+  basePrice: number,
+  days: number,
+  incrementPercent: number,
+) => {
+  return basePrice * (incrementPercent / 100) * days;
+};
+
+export const calculateDiscount = (basePrice: number, nights: number) => {
+  let discountPerNight = 0;
+
+  if (nights >= 4 && nights <= 6) {
+    discountPerNight = 10000;
+  } else if (nights >= 7 && nights <= 9) {
+    discountPerNight = 20000;
+  } else if (nights > 10) {
+    discountPerNight = 30000;
+  }
+
+  return discountPerNight * nights;
 };

@@ -15,6 +15,7 @@ import { RoomType } from 'src/room-type/entities/room-type.entity';
 import { RoomView } from 'src/room-view/entities/room-view.entity';
 import { GetAvailableRoomsArg } from './dto/args';
 import { AvailableRoom, Room } from './entities';
+import { ParseUUIDPipe } from '@nestjs/common';
 
 @Resolver(() => Room)
 export class RoomResolver {
@@ -25,37 +26,45 @@ export class RoomResolver {
   ) {}
 
   @Mutation(() => Room)
-  async createRoom(@Args('createRoomInput') createRoomInput: CreateRoomInput) {
+  async createRoom(
+    @Args('createRoomInput') createRoomInput: CreateRoomInput,
+  ): Promise<Room> {
     return await this.roomService.create(createRoomInput);
   }
 
   @Query(() => [Room], { name: 'rooms' })
-  async findAll() {
+  async findAll(): Promise<Room[]> {
     return await this.roomService.findAll();
   }
 
   @Query(() => Room, { name: 'room' })
-  async findOne(@Args('id', { type: () => ID }) id: string) {
+  async findOne(
+    @Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
+  ): Promise<Room> {
     return await this.roomService.findOne(id);
   }
 
   @Mutation(() => Room)
-  async updateRoom(@Args('updateRoomInput') updateRoomInput: UpdateRoomInput) {
+  async updateRoom(
+    @Args('updateRoomInput') updateRoomInput: UpdateRoomInput,
+  ): Promise<Room> {
     return await this.roomService.update(updateRoomInput);
   }
 
   @ResolveField(() => RoomType, { name: 'type' })
-  async getTypeByRoom(@Parent() room: Room | AvailableRoom) {
+  async getTypeByRoom(@Parent() room: Room | AvailableRoom): Promise<RoomType> {
     return await this.roomTypeService.findOne(room.roomTypeId);
   }
 
   @ResolveField(() => RoomView, { name: 'view' })
-  async getViewByRoom(@Parent() room: Room | AvailableRoom) {
+  async getViewByRoom(@Parent() room: Room | AvailableRoom): Promise<RoomView> {
     return await this.roomViewService.findOne(room.roomViewId);
   }
 
   @Query(() => [AvailableRoom], { name: 'availableRooms' })
-  async getAvailableRooms(@Args() args: GetAvailableRoomsArg) {
+  async getAvailableRooms(
+    @Args() args: GetAvailableRoomsArg,
+  ): Promise<AvailableRoom[]> {
     return await this.roomService.getAvailableRooms(args);
   }
 }

@@ -11,6 +11,9 @@ export class BillingDetails {
   @Field(() => Float)
   basePrice: number;
 
+  @Field(() => Int)
+  weekendDays: number;
+
   @Field(() => Float)
   weekendIncrease: number;
 
@@ -19,4 +22,7 @@ export class BillingDetails {
 
   @Field(() => Float)
   allInclusiveTotal: number;
+
+  @Field(() => Float)
+  total: number;
 }

@@ -5,8 +5,11 @@ import { AvailableRoom, Room } from './entities';
 import { GetAvailableRoomsArg } from './dto/args';
 import { Prisma } from '@prisma/client';
 import {
+  calculateDiscount,
   calculatePriceAllInclusive,
   calculatePriceOfNights,
+  calculateTotalWeekendDays,
+  calculateTotalWeekendIncrement,
   formatDateStringCOToUTC,
   getDaysAndNights,
 } from 'src/common/utils';
@@ -180,17 +183,31 @@ export class RoomService {
   }) {
     const { days, nights } = getDaysAndNights(checkIn, checkOut);
 
+    const allInclusiveTotal = allInclusive
+      ? calculatePriceAllInclusive(days, nights, quantityPeople, 25000)
+      : 0;
+    const weekendDays = calculateTotalWeekendDays(checkIn, checkOut);
+    const basePriceOfNights = calculatePriceOfNights(days, nights, basePrice);
+    const discount = calculateDiscount(basePrice, nights);
+    const weekendIncrease = calculateTotalWeekendIncrement(
+      basePrice,
+      weekendDays,
+      20,
+    );
+
+    const total =
+      basePriceOfNights - discount + weekendIncrease + allInclusiveTotal;
+
     return {
-      basePrice: calculatePriceOfNights(days, nights, basePrice),
-      allInclusiveTotal: allInclusive
-        ? calculatePriceAllInclusive(days, nights, quantityPeople, 25000)
-        : 0,
-      daysDiscount: 100,
-      total: 100,
+      basePrice: basePriceOfNights,
+      allInclusiveTotal,
+      daysDiscount: discount,
+      weekendDays,
+      total,
       days,
       nights,
       quantityPeople,
-      weekendIncrease: 100,
+      weekendIncrease,
     };
   }
 }

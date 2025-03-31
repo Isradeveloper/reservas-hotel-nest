@@ -46,9 +46,11 @@ type BillingDetails {
   days: Int!
   nights: Int!
   basePrice: Float!
+  weekendDays: Int!
   weekendIncrease: Float!
   daysDiscount: Float!
   allInclusiveTotal: Float!
+  total: Float!
 }
 
 type AvailableRoom {
@@ -69,6 +71,8 @@ type AvailableRoom {
 
   """Billing details"""
   billingDetails: BillingDetails
+  type: RoomType!
+  view: RoomView!
 }
 
 type Room {
