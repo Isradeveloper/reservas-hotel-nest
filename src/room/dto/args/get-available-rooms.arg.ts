@@ -53,4 +53,9 @@ export class GetAvailableRoomsArg {
   @IsBoolean()
   @IsOptional()
   allInclusive?: boolean = false;
+
+  @Field(() => Boolean, { description: 'Find Exterior Rooms', nullable: true })
+  @IsBoolean()
+  @IsOptional()
+  isExterior?: boolean;
 }

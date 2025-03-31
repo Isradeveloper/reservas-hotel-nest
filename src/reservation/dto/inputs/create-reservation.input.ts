@@ -34,7 +34,7 @@ export class CreateReservationInput {
   @IsBoolean()
   allInclusive: boolean;
 
-  @Field(() => ID, { description: 'Room ID' })
+  @Field(() => ID, { description: 'Room Type ID' })
   @IsUUID()
-  roomId: string;
+  roomTypeId: string;
 }

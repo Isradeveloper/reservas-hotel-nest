@@ -94,6 +94,14 @@ type Room {
   view: RoomView!
 }
 
+type AvailableRoomCount {
+  """Number of available rooms"""
+  count: Int!
+
+  """Available rooms"""
+  rooms: [AvailableRoom!]!
+}
+
 type Reservation {
   """ID"""
   id: ID!
@@ -112,6 +120,29 @@ type Reservation {
 
   """Total"""
   total: Float!
+
+  """Room ID"""
+  roomId: String!
+  room: AvailableRoom!
+}
+
+type ReservationGroupItem {
+  """Number of reservations"""
+  count: Int!
+
+  """Reservations"""
+  reservations: [Reservation!]!
+}
+
+type ReservationGroup {
+  """Pending reservations"""
+  pending: ReservationGroupItem!
+
+  """In progress reservations"""
+  inProgress: ReservationGroupItem!
+
+  """Past reservations"""
+  past: ReservationGroupItem!
 }
 
 """DateTime custom scalar type"""
@@ -142,8 +173,14 @@ type Query {
 
     """All Inclusive"""
     allInclusive: Boolean = false
-  ): [AvailableRoom!]!
+
+    """Find Exterior Rooms"""
+    isExterior: Boolean
+    search: String
+  ): AvailableRoomCount!
+  reservations: [Reservation!]!
   reservation(id: ID!): Reservation!
+  reservationsGroup: ReservationGroup!
 }
 
 type Mutation {
@@ -156,7 +193,7 @@ type Mutation {
   createRoom(createRoomInput: CreateRoomInput!): Room!
   updateRoom(updateRoomInput: UpdateRoomInput!): Room!
   createReservation(createReservationInput: CreateReservationInput!): Reservation!
-  updateReservation(updateReservationInput: UpdateReservationInput!): Reservation!
+  cancelReservation(id: ID!): Reservation!
 }
 
 input CreateRoomTypeInput {
@@ -243,26 +280,6 @@ input CreateReservationInput {
   """All Inclusive"""
   allInclusive: Boolean!
 
-  """Room ID"""
-  roomId: ID!
-}
-
-input UpdateReservationInput {
-  """Check In (yyyy-MM-dd HH:mm)"""
-  checkIn: String
-
-  """Check Out (yyyy-MM-dd HH:mm)"""
-  checkOut: String
-
-  """People Number"""
-  peopleNumber: Int
-
-  """All Inclusive"""
-  allInclusive: Boolean
-
-  """Room ID"""
-  roomId: ID
-
-  """ID"""
-  id: ID!
+  """Room Type ID"""
+  roomTypeId: ID!
 }

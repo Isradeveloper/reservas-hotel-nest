@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateRoomInput, UpdateRoomInput } from './dto/inputs';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AvailableRoom, Room } from './entities';
+import { Room } from './entities';
 import { GetAvailableRoomsArg } from './dto/args';
 import { Prisma } from '@prisma/client';
 import {
@@ -13,10 +13,16 @@ import {
   formatDateStringCOToUTC,
   getDaysAndNights,
 } from 'src/common/utils';
+import { RoomTypeService } from 'src/room-type/room-type.service';
+import { SearchArgs } from 'src/common/dto/args';
+import { AvailableRoomCount } from './types/available-room-count.type';
 
 @Injectable()
 export class RoomService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly roomTypeService: RoomTypeService,
+  ) {}
 
   async create(createRoomInput: CreateRoomInput): Promise<Room> {
     const roomByNumber = await this.findOneByNumber(createRoomInput.number);
@@ -75,7 +81,8 @@ export class RoomService {
 
   async getAvailableRooms(
     args: GetAvailableRoomsArg,
-  ): Promise<AvailableRoom[]> {
+    searchArgs: SearchArgs,
+  ): Promise<AvailableRoomCount> {
     const {
       checkIn,
       checkOut,
@@ -83,14 +90,23 @@ export class RoomService {
       roomTypeId,
       roomViewId,
       allInclusive,
+      isExterior,
     } = args;
 
     const checkInDate = formatDateStringCOToUTC(checkIn);
     const checkOutDate = formatDateStringCOToUTC(checkOut);
 
     const whereCondition: Prisma.RoomWhereInput = {
-      roomType: { isActive: true, maxCapacity: { gte: peopleNumber } },
-      roomView: { isActive: true },
+      roomType: {
+        isActive: true,
+        maxCapacity: {
+          gte: peopleNumber,
+        },
+      },
+      roomView: {
+        isActive: true,
+        name: isExterior ? 'EXTERIOR' : undefined,
+      },
       isActive: true,
       roomTypeId: roomTypeId || undefined,
       roomViewId: roomViewId || undefined,
@@ -98,10 +114,27 @@ export class RoomService {
         none: {
           isActive: true,
           OR: [
-            { checkIn: { lt: checkOutDate }, checkOut: { gt: checkInDate } },
+            {
+              checkIn: { lt: checkOutDate },
+              checkOut: { gt: checkInDate },
+            },
           ],
         },
       },
+      ...(searchArgs.search && {
+        OR: [
+          {
+            roomType: {
+              name: { contains: searchArgs.search, mode: 'insensitive' },
+            },
+          },
+          {
+            roomView: {
+              name: { contains: searchArgs.search, mode: 'insensitive' },
+            },
+          },
+        ],
+      }),
     };
 
     const rooms = await this.prismaService.room.findMany({
@@ -123,7 +156,7 @@ export class RoomService {
       },
     });
 
-    return rooms.map((room) => ({
+    const availableRooms = rooms.map((room) => ({
       ...room,
       billingDetails: this.getBillingDetails({
         basePrice: room.roomType.basePrice,
@@ -133,6 +166,11 @@ export class RoomService {
         allInclusive: !!allInclusive,
       }),
     }));
+
+    return {
+      count: availableRooms.length,
+      rooms: availableRooms,
+    };
   }
 
   async verifyAvailabilityOfRoom(
@@ -208,6 +246,28 @@ export class RoomService {
       nights,
       quantityPeople,
       weekendIncrease,
+    };
+  }
+
+  async findOneRoomWithBillingDetails(
+    roomId: string,
+    checkIn: Date,
+    checkOut: Date,
+    peopleNumber: number,
+    allInclusive: boolean,
+  ) {
+    const room = await this.findOne(roomId);
+    const type = await this.roomTypeService.findOne(room.roomTypeId);
+
+    return {
+      ...room,
+      billingDetails: this.getBillingDetails({
+        basePrice: type.basePrice,
+        checkIn,
+        checkOut,
+        quantityPeople: peopleNumber,
+        allInclusive,
+      }),
     };
   }
 }

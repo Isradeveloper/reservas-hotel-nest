@@ -16,6 +16,8 @@ import { RoomView } from 'src/room-view/entities/room-view.entity';
 import { GetAvailableRoomsArg } from './dto/args';
 import { AvailableRoom, Room } from './entities';
 import { ParseUUIDPipe } from '@nestjs/common';
+import { SearchArgs } from 'src/common/dto/args/search.args';
+import { AvailableRoomCount } from './types/available-room-count.type';
 
 @Resolver(() => Room)
 export class RoomResolver {
@@ -61,10 +63,11 @@ export class RoomResolver {
     return await this.roomViewService.findOne(room.roomViewId);
   }
 
-  @Query(() => [AvailableRoom], { name: 'availableRooms' })
+  @Query(() => AvailableRoomCount, { name: 'availableRooms' })
   async getAvailableRooms(
     @Args() args: GetAvailableRoomsArg,
-  ): Promise<AvailableRoom[]> {
-    return await this.roomService.getAvailableRooms(args);
+    @Args() searchArgs: SearchArgs,
+  ): Promise<AvailableRoomCount> {
+    return await this.roomService.getAvailableRooms(args, searchArgs);
   }
 }

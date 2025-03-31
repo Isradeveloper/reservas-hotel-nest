@@ -19,4 +19,7 @@ export class Reservation {
 
   @Field(() => Float, { description: 'Total' })
   total: number;
+
+  @Field(() => String, { description: 'Room ID' })
+  roomId: string;
 }
