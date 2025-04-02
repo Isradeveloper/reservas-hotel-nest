@@ -1,50 +1,37 @@
-# Etapa de instalación de dependencias (solo cuando sea necesario)
-FROM node:20.15-alpine3.20 AS deps
+# Usa la imagen oficial de Node.js 22
+FROM node:22 AS build
 
-# Instalar la librería de compatibilidad para Alpine
-RUN apk add --no-cache libc6-compat
-
-# Establecer el directorio de trabajo en la imagen
+# Establece el directorio de trabajo en /app
 WORKDIR /app
 
-# Copiar los archivos de configuración de las dependencias (package.json y yarn.lock)
+# Copia los archivos de configuración de package.json y yarn.lock
 COPY package.json yarn.lock ./
 
-# Instalar las dependencias del proyecto de acuerdo al archivo yarn.lock
-# Esto ejecutará el gancho postinstall de Prisma, generando el cliente automáticamente
+# Instala las dependencias utilizando Yarn
 RUN yarn install --frozen-lockfile
 
-# Etapa de construcción de la aplicación, usando las dependencias de la etapa anterior
-FROM node:20.15-alpine3.20 AS builder
+# Ejecuta npx prisma generate para generar el cliente Prisma
+RUN npx prisma generate
 
-# Establecer el directorio de trabajo en la imagen
-WORKDIR /app
-
-# Copiar las dependencias instaladas desde la etapa 'deps'
-COPY --from=deps /app/node_modules ./node_modules
-
-# Copiar todo el código fuente al contenedor
+# Copia todo el código del proyecto al contenedor
 COPY . .
 
-RUN npx prisma generate
-# Construir la aplicación
+# Compila el proyecto NestJS
 RUN yarn build
 
-# Etapa de producción, copiar todos los archivos necesarios y ejecutar la aplicación
-FROM node:20.15-alpine3.20 AS runner
+# Usa una imagen más ligera para la etapa de producción
+FROM node:22-slim
 
-# Establecer el directorio de trabajo para la aplicación en producción
-WORKDIR /usr/src/app
+# Establece el directorio de trabajo en /app
+WORKDIR /app
 
-# Copiar los archivos de configuración de las dependencias para producción
-COPY package.json yarn.lock ./
+# Copia las dependencias instaladas y el código compilado desde la etapa de build
+COPY --from=build /app/node_modules /app/node_modules
+COPY --from=build /app/dist /app/dist
+COPY --from=build /app/package.json /app/package.json
 
-# Instalar solo las dependencias necesarias para producción
-# Esto también activará el gancho postinstall de Prisma en producción
-RUN yarn install --prod
+# Exponer el puerto en el que la aplicación estará corriendo
+EXPOSE 3000
 
-# Copiar el directorio de distribución desde la etapa 'builder' (donde se construyó la app)
-COPY --from=builder /app/dist ./dist
-
-# Ejecutar la aplicación al iniciar el contenedor
+# Comando para ejecutar la aplicación en producción
 CMD ["node", "dist/main"]
