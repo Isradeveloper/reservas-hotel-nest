@@ -26,6 +26,9 @@ FROM node:22-slim
 # Establece el directorio de trabajo en /app
 WORKDIR /app
 
+# Instala OpenSSL 1.1.x en la imagen final
+RUN apt-get update -y && apt-get install -y openssl libssl1.1
+
 # Copia las dependencias instaladas y el código compilado desde la etapa de build
 COPY --from=build /app/node_modules /app/node_modules
 COPY --from=build /app/dist /app/dist
