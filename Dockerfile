@@ -27,7 +27,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Generar los tipos de Prisma (esto es importante para la etapa de producción)
-RUN yarn prisma generate
+RUN npx prisma generate --no-cache
 
 # Construir la aplicación
 RUN yarn build
