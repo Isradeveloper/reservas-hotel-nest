@@ -10,11 +10,12 @@ COPY package.json yarn.lock ./
 # Instala las dependencias utilizando Yarn
 RUN yarn install --frozen-lockfile
 
-# Ejecuta npx prisma generate para generar el cliente Prisma
-RUN npx prisma generate
 
 # Copia todo el código del proyecto al contenedor
 COPY . .
+
+# Ejecuta npx prisma generate para generar el cliente Prisma
+RUN npx prisma generate
 
 # Compila el proyecto NestJS
 RUN yarn build
