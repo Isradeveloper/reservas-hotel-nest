@@ -9,6 +9,7 @@ import {
   IsPositive,
 } from 'class-validator';
 import { isoHourMinute } from '../../../common/utils/regular-expressions.util';
+import { IsAfterDate } from '../../../common/decorators/is-after-date.decorator';
 
 @ArgsType()
 export class GetAvailableRoomsArg {
@@ -23,6 +24,9 @@ export class GetAvailableRoomsArg {
   @IsDateString()
   @Matches(isoHourMinute, {
     message: 'Invalid check out format (yyyy-MM-dd HH:mm)',
+  })
+  @IsAfterDate('checkIn', {
+    message: 'Invalid check out date, must be after check in date',
   })
   checkOut: string;
 

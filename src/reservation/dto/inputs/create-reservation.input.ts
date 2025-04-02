@@ -8,6 +8,7 @@ import {
   Matches,
 } from 'class-validator';
 import { isoHourMinute } from '../../../common/utils';
+import { IsAfterDate } from '../../../common/decorators/is-after-date.decorator';
 
 @InputType()
 export class CreateReservationInput {
@@ -18,6 +19,9 @@ export class CreateReservationInput {
   })
   checkIn: string;
 
+  @IsAfterDate('checkIn', {
+    message: 'Invalid check out date, must be after check in date',
+  })
   @Field(() => String, { description: 'Check Out (yyyy-MM-dd HH:mm)' })
   @IsDateString()
   @Matches(isoHourMinute, {
