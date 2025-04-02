@@ -1,0 +1,12 @@
+services:
+  db:
+    container_name: reserva-hotel
+    image: postgres:14.3
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
