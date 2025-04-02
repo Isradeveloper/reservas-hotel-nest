@@ -42,6 +42,7 @@ npx prisma migrate deploy
 ```sh
 npx prisma generate
 ```
+---
 
 Esto creara las tablas de la base de datos
 
@@ -52,8 +53,22 @@ Una vez que los contenedores estén corriendo, puedes iniciar el servidor en mod
 ```sh
 yarn start:dev
 ```
+---
 
-Esto recargará automáticamente los cambios en el código.
+### 6️⃣ Acceder al GraphQL
+
+Una vez que el servidor esté corriendo, puedes acceder al GraphQL Playground en:
+
+```sh
+http://localhost:${PORT}/graphql
+```
+
+### 7️⃣ Ejecutar seed
+Esto llenara las tablas de la base de datos
+
+mutation Mutation {
+  executeSeed
+}
 
 ## 🛠 Tecnologías usadas
 
