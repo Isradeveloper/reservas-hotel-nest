@@ -26,6 +26,7 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copiar todo el código fuente al contenedor
 COPY . .
 
+RUN npx prisma generate
 # Construir la aplicación
 RUN yarn build
 
