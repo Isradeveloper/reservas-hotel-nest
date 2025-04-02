@@ -25,7 +25,7 @@ yarn install
 Para ejecutar el backend junto con Redis, usa el siguiente comando:
 
 ```sh
-docker-compose -f docker-compose.dev.yml up -d
+docker compose -f docker-compose.dev.yaml up -d
 
 ```
 
@@ -42,6 +42,7 @@ npx prisma migrate deploy
 ```sh
 npx prisma generate
 ```
+
 ---
 
 Esto creara las tablas de la base de datos
@@ -53,6 +54,7 @@ Una vez que los contenedores estén corriendo, puedes iniciar el servidor en mod
 ```sh
 yarn start:dev
 ```
+
 ---
 
 ### 6️⃣ Acceder al GraphQL
@@ -64,10 +66,11 @@ http://localhost:${PORT}/graphql
 ```
 
 ### 7️⃣ Ejecutar seed
+
 Esto llenara las tablas de la base de datos
 
 mutation Mutation {
-  executeSeed
+executeSeed
 }
 
 ## 🛠 Tecnologías usadas
@@ -85,17 +88,6 @@ mutation Mutation {
 - Jest: Framework de pruebas utilizado para asegurar la calidad del código mediante la ejecución de pruebas unitarias y de integración, garantizando que las funcionalidades del sistema funcionen correctamente.
 
 ---
-
-## 📌 Notas adicionales
-
-- Si necesitas detener los contenedores de Docker, usa:
-  ```sh
-  docker-compose down
-  ```
-- Para ver logs del backend:
-  ```sh
-  docker logs -f backend-reservas-hotel
-  ```
 
 # Documentación de la API
 
