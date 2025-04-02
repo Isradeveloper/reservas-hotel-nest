@@ -16,12 +16,7 @@ export async function bootstrap() {
     }),
   );
 
-  await app.listen(process.env.PORT ?? 3000, () => {
-    Logger.log(
-      'Server started on port ' + (process.env.PORT ?? 3000),
-      'Bootstrap',
-    );
-  });
+  await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap().catch((err) => {
   Logger.error(err, 'Bootstrap failed');

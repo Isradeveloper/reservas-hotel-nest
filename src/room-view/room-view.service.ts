@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateRoomViewInput, UpdateRoomViewInput } from './dto/inputs';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { RoomView } from './entities/room-view.entity';
 
 @Injectable()

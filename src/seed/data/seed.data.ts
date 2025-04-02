@@ -1,5 +1,9 @@
 let roomNumber = 1;
 
+export const setRoomNumber = (number: number) => {
+  roomNumber = number;
+};
+
 export const ROOM_TYPES = [
   {
     name: 'SENCILLA',

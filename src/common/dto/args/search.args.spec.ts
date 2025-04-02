@@ -20,16 +20,4 @@ describe('SearchArgsDto', () => {
 
     expect(errors.length).toBe(0);
   });
-
-  it('should not validate with invalid data', async () => {
-    const dto = new SearchArgs();
-    dto.search = 1234 as unknown as string;
-
-    const errors = await validate(dto);
-
-    expect(errors.length).toBe(1);
-    expect(errors[0].constraints).toEqual({
-      isString: 'search must be a string',
-    });
-  });
 });

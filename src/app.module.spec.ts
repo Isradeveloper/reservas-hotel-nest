@@ -9,6 +9,8 @@ import { RoomTypeModule } from './room-type/room-type.module';
 import { RoomViewModule } from './room-view/room-view.module';
 import { RoomModule } from './room/room.module';
 import { ReservationModule } from './reservation/reservation.module';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { join } from 'path';
 
 describe('AppModule', () => {
   let app: TestingModule;
@@ -18,7 +20,11 @@ describe('AppModule', () => {
       imports: [
         AppModule,
         ConfigModule,
-        GraphQLModule,
+        GraphQLModule.forRoot<ApolloDriverConfig>({
+          driver: ApolloDriver,
+          autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+          sortSchema: true,
+        }),
         PrismaModule,
         CommonModule,
         SeedModule,

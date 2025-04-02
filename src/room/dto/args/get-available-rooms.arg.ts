@@ -8,7 +8,7 @@ import {
   IsOptional,
   IsPositive,
 } from 'class-validator';
-import { isoHourMinute } from 'src/common/utils/regular-expressions.util';
+import { isoHourMinute } from '../../../common/utils/regular-expressions.util';
 
 @ArgsType()
 export class GetAvailableRoomsArg {

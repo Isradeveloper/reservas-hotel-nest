@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import {
   DOUBLE_ROOMS,
   PRESIDENCIAL_ROOMS,
@@ -7,10 +7,10 @@ import {
   ROOM_VIEWS,
   SINGLE_ROOMS,
 } from './data/seed.data';
-import { RoomType } from 'src/room-type/entities/room-type.entity';
-import { RoomView } from 'src/room-view/entities/room-view.entity';
-import { Room } from 'src/room/entities';
-import { randomNumber } from 'src/common/utils';
+import { RoomType } from '../room-type/entities/room-type.entity';
+import { RoomView } from '../room-view/entities/room-view.entity';
+import { Room } from '../room/entities';
+import { randomNumber } from '../common/utils';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()

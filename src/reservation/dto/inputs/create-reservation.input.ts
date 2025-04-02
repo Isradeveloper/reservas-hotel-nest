@@ -7,7 +7,7 @@ import {
   IsUUID,
   Matches,
 } from 'class-validator';
-import { isoHourMinute } from 'src/common/utils';
+import { isoHourMinute } from '../../../common/utils';
 
 @InputType()
 export class CreateReservationInput {

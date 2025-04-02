@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateRoomInput, UpdateRoomInput } from './dto/inputs';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { Room } from './entities';
 import { GetAvailableRoomsArg } from './dto/args';
 import { Prisma } from '@prisma/client';
@@ -12,9 +12,9 @@ import {
   calculateTotalWeekendIncrement,
   formatDateStringCOToUTC,
   getDaysAndNights,
-} from 'src/common/utils';
-import { RoomTypeService } from 'src/room-type/room-type.service';
-import { SearchArgs } from 'src/common/dto/args';
+} from '../common/utils';
+import { RoomTypeService } from '../room-type/room-type.service';
+import { SearchArgs } from '../common/dto/args';
 import { AvailableRoomCount } from './types/available-room-count.type';
 
 @Injectable()

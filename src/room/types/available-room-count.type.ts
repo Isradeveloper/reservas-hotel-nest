@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { AvailableRoom } from 'src/room/entities';
+import { AvailableRoom } from '../../room/entities';
 
 @ObjectType()
 export class AvailableRoomCount {

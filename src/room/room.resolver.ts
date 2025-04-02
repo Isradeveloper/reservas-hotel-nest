@@ -11,12 +11,12 @@ import { RoomService } from './room.service';
 import { CreateRoomInput, UpdateRoomInput } from './dto/inputs';
 import { RoomTypeService } from '../room-type/room-type.service';
 import { RoomViewService } from '../room-view/room-view.service';
-import { RoomType } from 'src/room-type/entities/room-type.entity';
-import { RoomView } from 'src/room-view/entities/room-view.entity';
+import { RoomType } from '../room-type/entities/room-type.entity';
+import { RoomView } from '../room-view/entities/room-view.entity';
 import { GetAvailableRoomsArg } from './dto/args';
 import { AvailableRoom, Room } from './entities';
 import { ParseUUIDPipe } from '@nestjs/common';
-import { SearchArgs } from 'src/common/dto/args/search.args';
+import { SearchArgs } from '../common/dto/args/search.args';
 import { AvailableRoomCount } from './types/available-room-count.type';
 
 @Resolver(() => Room)

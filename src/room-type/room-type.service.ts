@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateRoomTypeInput, UpdateRoomTypeInput } from './dto/inputs';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { RoomType } from './entities/room-type.entity';
 
 @Injectable()

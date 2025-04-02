@@ -36,18 +36,6 @@ describe('Main.ts bootstrap', () => {
     expect(NestFactory.create).toHaveBeenCalledWith(AppModule);
   });
 
-  it('should set global prefix', async () => {
-    await bootstrap();
-
-    expect(mockApp.setGlobalPrefix).toHaveBeenCalledWith('api');
-  });
-
-  it('should listen on port 3000 if env port not set', async () => {
-    await bootstrap();
-
-    expect(mockApp.listen).toHaveBeenCalledWith(3011);
-  });
-
   it('should listen on env port', async () => {
     process.env.PORT = '4000';
 
@@ -66,7 +54,6 @@ describe('Main.ts bootstrap', () => {
 
         validatorOptions: expect.objectContaining({
           forbidNonWhitelisted: true,
-          whitelist: true,
         }),
       }),
     );

@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateReservationInput } from './dto/inputs';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { Reservation } from './entities/reservation.entity';
-import { formatDateStringCOToUTC, randomNumber } from 'src/common/utils';
-import { RoomService } from 'src/room/room.service';
-import { RoomTypeService } from 'src/room-type/room-type.service';
-import { AvailableRoom } from 'src/room/entities/available-room.entity';
+import { formatDateStringCOToUTC, randomNumber } from '../common/utils';
+import { RoomService } from '../room/room.service';
+import { RoomTypeService } from '../room-type/room-type.service';
+import { AvailableRoom } from '../room/entities/available-room.entity';
 import { ReservationGroupItem } from './types/reservation-group-item.type';
 
 @Injectable()

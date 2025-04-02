@@ -10,8 +10,8 @@ import {
 import { ReservationService } from './reservation.service';
 import { Reservation } from './entities/reservation.entity';
 import { CreateReservationInput } from './dto/inputs';
-import { AvailableRoom } from 'src/room/entities';
-import { RoomService } from 'src/room/room.service';
+import { AvailableRoom } from '../room/entities';
+import { RoomService } from '../room/room.service';
 import { ParseUUIDPipe } from '@nestjs/common';
 import { ReservationGroup } from './types/reservation-group.type';
 
