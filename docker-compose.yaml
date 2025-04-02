@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  backend-reservas-hotel:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: backend-reservas-hotel
+    container_name: backend-reservas-hotel
+    restart: always
+    ports:
+      - '${PORT}:${PORT}'
+    env_file:
+      - .env
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge

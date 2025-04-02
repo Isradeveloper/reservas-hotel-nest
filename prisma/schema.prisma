@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model RoomType {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  basePrice   Float
+  maxCapacity Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isActive    Boolean  @default(true)
+
+  rooms Room[]
+}
+
+model RoomView {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isActive  Boolean  @default(true)
+
+  rooms Room[]
+}
+
+model Room {
+  id        String   @id @default(uuid())
+  number    Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isActive  Boolean  @default(true)
+
+  roomTypeId String
+  roomType   RoomType @relation(fields: [roomTypeId], references: [id])
+
+  roomViewId String
+  roomView   RoomView @relation(fields: [roomViewId], references: [id])
+
+  reservations Reservation[]
+}
+
+model Reservation {
+  id           String   @id @default(uuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  isActive     Boolean  @default(true)
+  checkIn      DateTime @db.Timestamp()
+  checkOut     DateTime @db.Timestamp()
+  peopleNumber Int
+  allInclusive Boolean
+  total        Float
+
+  roomId String
+  room   Room   @relation(fields: [roomId], references: [id])
+}
