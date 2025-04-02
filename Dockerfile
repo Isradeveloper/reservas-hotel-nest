@@ -46,4 +46,4 @@ RUN yarn install --prod
 COPY --from=builder /app/dist ./dist
 
 # Ejecutar la aplicación al iniciar el contenedor
-CMD [ "node", "dist/main" ]
+CMD [ "yarn", "start:prod" ]
