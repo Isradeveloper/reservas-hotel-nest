@@ -17,9 +17,6 @@ RUN yarn install --frozen-lockfile
 # Etapa de construcción de la aplicación, usando las dependencias de la etapa anterior
 FROM node:20.15-alpine3.20 AS builder
 
-# Generar los tipos de Prisma (esto es importante para la etapa de producción)
-RUN npx prisma generate
-
 # Establecer el directorio de trabajo en la imagen
 WORKDIR /app
 
