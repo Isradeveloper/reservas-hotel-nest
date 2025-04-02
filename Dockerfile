@@ -8,7 +8,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Copiar los archivos de configuración de las dependencias (package.json y yarn.lock)
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock ./ 
 
 # Instalar las dependencias del proyecto de acuerdo al archivo yarn.lock
 RUN yarn install --frozen-lockfile
@@ -26,6 +26,9 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copiar todo el código fuente al contenedor
 COPY . .
 
+# Generar los tipos de Prisma (esto es importante para la etapa de producción)
+RUN yarn prisma generate
+
 # Construir la aplicación
 RUN yarn build
 
@@ -37,7 +40,7 @@ FROM node:20.15-alpine3.20 AS runner
 WORKDIR /usr/src/app
 
 # Copiar los archivos de configuración de las dependencias para producción
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock ./ 
 
 # Instalar solo las dependencias necesarias para producción
 RUN yarn install --prod
