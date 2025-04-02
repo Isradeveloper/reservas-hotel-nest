@@ -1,98 +1,526 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Backend - Reservas Hotel
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este proyecto consiste en la construcción de un API GraphQL para la reserva de habitaciones en un hotel, implementado con el framework NestJS. El sistema permite gestionar las reservas de un hotel de 30 habitaciones, donde los usuarios pueden realizar reservas según la disponibilidad, tipo de habitación, número de personas, fechas de entrada y salida, y opción de servicio todo incluido. Además, se implementan reglas dinámicas de cálculo de precios y descuentos basadas en el número de noches, los días de la semana y las características de la habitación.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Pasos para ejecutar el proyecto
 
-## Description
+### 1️⃣ Llenar las variables de entorno
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Antes de ejecutar el proyecto, copia el archivo de .env.template y modifica los valores según tu configuración.
 
-## Project setup
+---
 
-```bash
-$ yarn install
+### 2️⃣ Instalar dependencias
+
+Asegúrate de tener **Yarn** instalado y ejecuta:
+
+```sh
+yarn install
 ```
 
-## Compile and run the project
+---
 
-```bash
-# development
-$ yarn run start
+### 3️⃣ Levantar los servicios con Docker Compose-dev
 
-# watch mode
-$ yarn run start:dev
+Para ejecutar el backend junto con Redis, usa el siguiente comando:
 
-# production mode
-$ yarn run start:prod
+```sh
+docker-compose -f docker-compose.dev.yml up -d
+
 ```
 
-## Run tests
+Esto iniciará el backend y la base de datos PostgreSQL local
 
-```bash
-# unit tests
-$ yarn run test
+---
 
-# e2e tests
-$ yarn run test:e2e
+### 4️⃣ Ejecutar migraciones de prisma y generar cliente
 
-# test coverage
-$ yarn run test:cov
+```sh
+npx prisma migrate deploy
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ yarn install -g mau
-$ mau deploy
+```sh
+npx prisma generate
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Esto creara las tablas de la base de datos
 
-## Resources
+### 5️⃣ Iniciar el servidor en modo desarrollo
 
-Check out a few resources that may come in handy when working with NestJS:
+Una vez que los contenedores estén corriendo, puedes iniciar el servidor en modo desarrollo con:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```sh
+yarn start:dev
+```
 
-## Support
+Esto recargará automáticamente los cambios en el código.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## 🛠 Tecnologías usadas
 
-## Stay in touch
+- NestJS: Framework de Node.js para construir aplicaciones eficientes, confiables y escalables. Utilizado para crear el API GraphQL, gestionando las operaciones de reserva, cálculo de precios y generación de respuestas optimizadas.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- GraphQL: Lenguaje de consulta para API que permite obtener exactamente los datos requeridos. Implementado para gestionar las consultas (queries) y mutaciones del sistema de reservas de habitaciones.
 
-## License
+- TypeScript: Lenguaje de programación que añade tipado estático a JavaScript, utilizado en el desarrollo de la API para mejorar la mantenibilidad y la detección temprana de errores.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- PostgreSQL: Sistema de gestión de bases de datos relacional utilizado para almacenar los datos de las habitaciones, reservas, y detalles asociados, asegurando consultas rápidas y eficientes.
+
+- Prisma: ORM utilizado para interactuar con la base de datos PostgreSQL, permitiendo una integración sencilla con NestJS y una gestión eficiente de las operaciones CRUD.
+
+- Jest: Framework de pruebas utilizado para asegurar la calidad del código mediante la ejecución de pruebas unitarias y de integración, garantizando que las funcionalidades del sistema funcionen correctamente.
+
+---
+
+## 📌 Notas adicionales
+
+- Si necesitas detener los contenedores de Docker, usa:
+  ```sh
+  docker-compose down
+  ```
+- Para ver logs del backend:
+  ```sh
+  docker logs -f backend-reservas-hotel
+  ```
+
+# Documentación de la API
+
+Este documento describe la API GraphQL para la gestión de habitaciones y reservas.
+
+## Scalars
+
+### `Date`
+
+Un tipo escalar personalizado que representa una fecha y hora en Timezone America Bogotá. El formato esperado es `yyyy-MM-dd HH:mm`.
+
+## Tipos
+
+### `AvailableRoom`
+
+Representa una habitación que está disponible para reserva durante un período de tiempo específico.
+
+| Campo            | Tipo             | Descripción                         |
+| ---------------- | ---------------- | ----------------------------------- |
+| `id`             | `ID!`            | ID de la habitación                 |
+| `number`         | `Int!`           | Número de la habitación             |
+| `isActive`       | `Boolean!`       | Indica si la habitación está activa |
+| `createdAt`      | `Date!`          | Fecha de creación                   |
+| `updatedAt`      | `Date!`          | Fecha de última actualización       |
+| `billingDetails` | `BillingDetails` | Detalles de facturación             |
+| `type`           | `RoomType!`      | Tipo de habitación                  |
+| `view`           | `RoomView!`      | Vista desde la habitación           |
+
+### `AvailableRoomCount`
+
+Representa un conteo de habitaciones disponibles y una lista de esas habitaciones.
+
+| Campo   | Tipo                | Descripción                        |
+| ------- | ------------------- | ---------------------------------- |
+| `count` | `Int!`              | Número de habitaciones disponibles |
+| `rooms` | `[AvailableRoom!]!` | Lista de habitaciones disponibles  |
+
+### `BillingDetails`
+
+Proporciona un desglose de la facturación para la reserva de una habitación.
+
+| Campo               | Tipo     | Descripción                                 |
+| ------------------- | -------- | ------------------------------------------- |
+| `days`              | `Int!`   | Número total de días                        |
+| `nights`            | `Int!`   | Número total de noches                      |
+| `basePrice`         | `Float!` | Precio base de la estancia                  |
+| `weekendDays`       | `Int!`   | Número de días de fin de semana             |
+| `weekendIncrease`   | `Float!` | Cargo adicional por fines de semana         |
+| `daysDiscount`      | `Float!` | Descuento aplicado por estancias más largas |
+| `allInclusiveTotal` | `Float!` | Costo total de la opción todo incluido      |
+| `total`             | `Float!` | Costo total de la reserva                   |
+
+### `Reservation`
+
+Representa una reserva de habitación.
+
+| Campo          | Tipo             | Descripción          |
+| -------------- | ---------------- | -------------------- |
+| `id`           | `ID!`            | ID                   |
+| `checkIn`      | `Date!`          | Fecha de Check In    |
+| `checkOut`     | `Date!`          | Fecha de Check Out   |
+| `peopleNumber` | `Int!`           | Número de personas   |
+| `allInclusive` | `Boolean!`       | Opción Todo Incluido |
+| `total`        | `Float!`         | Costo total          |
+| `roomId`       | `String!`        | ID de la habitación  |
+| `room`         | `AvailableRoom!` | Habitación reservada |
+
+### `ReservationGroup`
+
+Organiza las reservas en diferentes grupos de estado.
+
+| Campo        | Tipo                    | Descripción         |
+| ------------ | ----------------------- | ------------------- |
+| `pending`    | `ReservationGroupItem!` | Reservas pendientes |
+| `inProgress` | `ReservationGroupItem!` | Reservas en curso   |
+| `past`       | `ReservationGroupItem!` | Reservas pasadas    |
+
+### `ReservationGroupItem`
+
+Representa un grupo de reservas con un conteo.
+
+| Campo          | Tipo              | Descripción        |
+| -------------- | ----------------- | ------------------ |
+| `count`        | `Int!`            | Número de reservas |
+| `reservations` | `[Reservation!]!` | Lista de reservas  |
+
+### `Room`
+
+Representa una habitación específica en el hotel.
+
+| Campo       | Tipo        | Descripción                         |
+| ----------- | ----------- | ----------------------------------- |
+| `id`        | `ID!`       | ID de la habitación                 |
+| `number`    | `Int!`      | Número de la habitación             |
+| `isActive`  | `Boolean!`  | Indica si la habitación está activa |
+| `createdAt` | `Date!`     | Fecha de creación                   |
+| `updatedAt` | `Date!`     | Fecha de última actualización       |
+| `type`      | `RoomType!` | Tipo de habitación                  |
+| `view`      | `RoomView!` | Vista desde la habitación           |
+
+### `RoomType`
+
+Representa un tipo de habitación con características específicas.
+
+| Campo         | Tipo       | Descripción      |
+| ------------- | ---------- | ---------------- |
+| `id`          | `ID!`      | ID               |
+| `name`        | `String!`  | Nombre           |
+| `basePrice`   | `Float!`   | Precio Base      |
+| `maxCapacity` | `Int!`     | Capacidad Máxima |
+| `isActive`    | `Boolean!` | Está Activo      |
+| `createdAt`   | `Date!`    | Creado En        |
+| `updatedAt`   | `Date!`    | Actualizado En   |
+
+### `RoomView`
+
+Representa la vista desde una habitación.
+
+| Campo       | Tipo       | Descripción                               |
+| ----------- | ---------- | ----------------------------------------- |
+| `id`        | `ID!`      | ID de la vista de la habitación           |
+| `name`      | `String!`  | Nombre de la vista de la habitación       |
+| `createdAt` | `Date!`    | Fecha de creación de la vista             |
+| `updatedAt` | `Date!`    | Fecha de última actualización de la vista |
+| `isActive`  | `Boolean!` | Indica si la vista está activa            |
+
+## Consultas
+
+### `availableRooms(checkIn: String!, checkOut: String!, peopleNumber: Int!, roomTypeId: ID, roomViewId: ID, allInclusive: Boolean = false, isExterior: Boolean, search: String): AvailableRoomCount!`
+
+Recupera una lista de habitaciones disponibles según los criterios proporcionados.
+
+#### Argumentos
+
+| Nombre         | Tipo      | Descripción                                                                 |
+| -------------- | --------- | --------------------------------------------------------------------------- |
+| `checkIn`      | `String!` | Fecha y hora de Check In (yyyy-MM-dd HH:mm)                                 |
+| `checkOut`     | `String!` | Fecha y hora de Check Out (yyyy-MM-dd HH:mm)                                |
+| `peopleNumber` | `Int!`    | Número de personas para la reserva                                          |
+| `roomTypeId`   | `ID`      | ID opcional del tipo de habitación deseado                                  |
+| `roomViewId`   | `ID`      | ID opcional de la vista de habitación deseada                               |
+| `allInclusive` | `Boolean` | Filtro opcional para disponibilidad todo incluido (predeterminado: `false`) |
+| `isExterior`   | `Boolean` | Filtro opcional para habitaciones exteriores                                |
+| `search`       | `String`  | Término de búsqueda opcional                                                |
+
+#### Devuelve
+
+`AvailableRoomCount!`
+
+### `reservation(id: ID!): Reservation!`
+
+Recupera una reserva específica por su ID.
+
+#### Argumentos
+
+| Nombre | Tipo  | Descripción      |
+| ------ | ----- | ---------------- |
+| `id`   | `ID!` | ID de la reserva |
+
+#### Devuelve
+
+`Reservation!`
+
+### `reservations: [Reservation!]!`
+
+Recupera una lista de todas las reservas.
+
+#### Devuelve
+
+`[Reservation!]!`
+
+### `reservationsGroup: ReservationGroup!`
+
+Recupera las reservas agrupadas por su estado actual (pendientes, en curso, pasadas).
+
+#### Devuelve
+
+`ReservationGroup!`
+
+### `room(id: ID!): Room!`
+
+Recupera una habitación específica por su ID.
+
+#### Argumentos
+
+| Nombre | Tipo  | Descripción         |
+| ------ | ----- | ------------------- |
+| `id`   | `ID!` | ID de la habitación |
+
+#### Devuelve
+
+`Room!`
+
+### `rooms: [Room!]!`
+
+Recupera una lista de todas las habitaciones.
+
+#### Devuelve
+
+`[Room!]!`
+
+### `roomType(id: ID!): RoomType!`
+
+Recupera un tipo de habitación específico por su ID.
+
+#### Argumentos
+
+| Nombre | Tipo  | Descripción               |
+| ------ | ----- | ------------------------- |
+| `id`   | `ID!` | ID del tipo de habitación |
+
+#### Devuelve
+
+`RoomType!`
+
+### `roomTypes: [RoomType!]!`
+
+Recupera una lista de todos los tipos de habitación.
+
+#### Devuelve
+
+`[RoomType!]!`
+
+### `roomView(id: ID!): RoomView!`
+
+Recupera una vista de habitación específica por su ID.
+
+#### Argumentos
+
+| Nombre | Tipo  | Descripción                     |
+| ------ | ----- | ------------------------------- |
+| `id`   | `ID!` | ID de la vista de la habitación |
+
+#### Devuelve
+
+`RoomView!`
+
+### `roomViews: [RoomView!]!`
+
+Recupera una lista de todas las vistas de habitación.
+
+#### Devuelve
+
+`[RoomView!]!`
+
+## Mutaciones
+
+### `cancelReservation(id: ID!): Reservation!`
+
+Cancela una reserva existente.
+
+#### Argumentos
+
+| Nombre | Tipo  | Descripción                 |
+| ------ | ----- | --------------------------- |
+| `id`   | `ID!` | ID de la reserva a cancelar |
+
+#### Devuelve
+
+`Reservation!`
+
+### `createReservation(createReservationInput: CreateReservationInput!): Reservation!`
+
+Crea una nueva reserva.
+
+#### Argumentos
+
+| Nombre                   | Tipo                      | Descripción                                     |
+| ------------------------ | ------------------------- | ----------------------------------------------- |
+| `createReservationInput` | `CreateReservationInput!` | Objeto de entrada para crear una nueva reserva. |
+
+#### Devuelve
+
+`Reservation!`
+
+### `createRoom(createRoomInput: CreateRoomInput!): Room!`
+
+Crea una nueva habitación.
+
+#### Argumentos
+
+| Nombre            | Tipo               | Descripción                                        |
+| ----------------- | ------------------ | -------------------------------------------------- |
+| `createRoomInput` | `CreateRoomInput!` | Objeto de entrada para crear una nueva habitación. |
+
+#### Devuelve
+
+`Room!`
+
+### `createRoomType(createRoomTypeInput: CreateRoomTypeInput!): RoomType!`
+
+Crea un nuevo tipo de habitación.
+
+#### Argumentos
+
+| Nombre                | Tipo                   | Descripción                                               |
+| --------------------- | ---------------------- | --------------------------------------------------------- |
+| `createRoomTypeInput` | `CreateRoomTypeInput!` | Objeto de entrada para crear un nuevo tipo de habitación. |
+
+#### Devuelve
+
+`RoomType!`
+
+### `createRoomView(createRoomViewInput: CreateRoomViewInput!): RoomView!`
+
+Crea una nueva vista de habitación.
+
+#### Argumentos
+
+| Nombre                | Tipo                   | Descripción                                                 |
+| --------------------- | ---------------------- | ----------------------------------------------------------- |
+| `createRoomViewInput` | `CreateRoomViewInput!` | Objeto de entrada para crear una nueva vista de habitación. |
+
+#### Devuelve
+
+`RoomView!`
+
+### `executeSeed: String!`
+
+Llena la base de datos con datos iniciales (solo para desarrollo).
+
+#### Devuelve
+
+`String!`
+
+### `updateRoom(updateRoomInput: UpdateRoomInput!): Room!`
+
+Actualiza una habitación existente.
+
+#### Argumentos
+
+| Nombre            | Tipo               | Descripción                                       |
+| ----------------- | ------------------ | ------------------------------------------------- |
+| `updateRoomInput` | `UpdateRoomInput!` | Objeto de entrada para actualizar una habitación. |
+
+#### Devuelve
+
+`Room!`
+
+### `updateRoomType(updateRoomTypeInput: UpdateRoomTypeInput!): RoomType!`
+
+Actualiza un tipo de habitación existente.
+
+#### Argumentos
+
+| Nombre                | Tipo                   | Descripción                                              |
+| --------------------- | ---------------------- | -------------------------------------------------------- |
+| `updateRoomTypeInput` | `UpdateRoomTypeInput!` | Objeto de entrada para actualizar un tipo de habitación. |
+
+#### Devuelve
+
+`RoomType!`
+
+### `updateRoomView(updateRoomViewInput: UpdateRoomViewInput!): RoomView!`
+
+Actualiza una vista de habitación existente.
+
+#### Argumentos
+
+| Nombre                | Tipo                   | Descripción                                                |
+| --------------------- | ---------------------- | ---------------------------------------------------------- |
+| `updateRoomViewInput` | `UpdateRoomViewInput!` | Objeto de entrada para actualizar una vista de habitación. |
+
+#### Devuelve
+
+`RoomView!`
+
+## Objetos de Entrada
+
+### `CreateReservationInput`
+
+Objeto de entrada para crear una nueva reserva.
+
+| Campo          | Tipo       | Descripción                                          |
+| -------------- | ---------- | ---------------------------------------------------- |
+| `checkIn`      | `String!`  | Fecha y hora de Check In (yyyy-MM-dd HH:mm)          |
+| `checkOut`     | `String!`  | Fecha y hora de Check Out (yyyy-MM-dd HH:mm)         |
+| `peopleNumber` | `Int!`     | Número de personas para la reserva                   |
+| `allInclusive` | `Boolean!` | Indica si la reserva incluye servicios todo incluido |
+| `roomTypeId`   | `ID!`      | ID del tipo de habitación deseado                    |
+
+### `CreateRoomInput`
+
+Objeto de entrada para crear una nueva habitación.
+
+| Campo        | Tipo   | Descripción                     |
+| ------------ | ------ | ------------------------------- |
+| `number`     | `Int!` | Número de la habitación         |
+| `roomTypeId` | `ID!`  | ID del tipo de habitación       |
+| `roomViewId` | `ID!`  | ID de la vista de la habitación |
+
+### `CreateRoomTypeInput`
+
+Objeto de entrada para crear un nuevo tipo de habitación.
+
+| Campo         | Tipo      | Descripción      |
+| ------------- | --------- | ---------------- |
+| `name`        | `String!` | Nombre           |
+| `basePrice`   | `Float!`  | Precio Base      |
+| `maxCapacity` | `Int!`    | Capacidad Máxima |
+| `isActive`    | `Boolean` | Está Activo      |
+
+### `CreateRoomViewInput`
+
+Objeto de entrada para crear una nueva vista de habitación.
+
+| Campo      | Tipo      | Descripción                         |
+| ---------- | --------- | ----------------------------------- |
+| `name`     | `String!` | Nombre de la vista de la habitación |
+| `isActive` | `Boolean` | Indica si la vista está activa      |
+
+### `UpdateRoomInput`
+
+Objeto de entrada para actualizar una habitación existente. Al menos un campo debe ser proporcionado.
+
+| Campo        | Tipo  | Descripción                           |
+| ------------ | ----- | ------------------------------------- |
+| `number`     | `Int` | Nuevo número de la habitación         |
+| `roomTypeId` | `ID`  | Nuevo ID del tipo de habitación       |
+| `roomViewId` | `ID`  | Nuevo ID de la vista de la habitación |
+| `id`         | `ID!` | ID de la habitación a actualizar      |
+
+### `UpdateRoomTypeInput`
+
+Objeto de entrada para actualizar un tipo de habitación existente. Al menos un campo debe ser proporcionado.
+
+| Campo         | Tipo      | Descripción                            |
+| ------------- | --------- | -------------------------------------- |
+| `name`        | `String`  | Nuevo nombre                           |
+| `basePrice`   | `Float`   | Nuevo precio base                      |
+| `maxCapacity` | `Int`     | Nueva capacidad máxima                 |
+| `isActive`    | `Boolean` | Nuevo estado activo                    |
+| `id`          | `ID!`     | ID del tipo de habitación a actualizar |
+
+### `UpdateRoomViewInput`
+
+Objeto de entrada para actualizar una vista de habitación existente. Al menos un campo debe ser proporcionado.
+
+| Campo      | Tipo      | Descripción                                  |
+| ---------- | --------- | -------------------------------------------- |
+| `name`     | `String`  | Nuevo nombre de la vista de la habitación    |
+| `isActive` | `Boolean` | Nuevo estado activo                          |
+| `id`       | `ID!`     | ID de la vista de la habitación a actualizar |
